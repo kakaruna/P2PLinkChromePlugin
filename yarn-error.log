@@ -1,0 +1,69 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.7.0/libexec/bin/yarn.js
+
+PATH: 
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/usr/local/share/dotnet:~/.dotnet/tools:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Wireshark.app/Contents/MacOS
+
+Yarn version: 
+  1.7.0
+
+Node version: 
+  9.10.1
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: https://registry.npmjs.org/@types%2fchrome: ETIMEDOUT
+      at Timeout._onTimeout (/usr/local/Cellar/yarn/1.7.0/libexec/lib/cli.js:135339:19)
+      at ontimeout (timers.js:466:11)
+      at tryOnTimeout (timers.js:304:5)
+      at Timer.listOnTimeout (timers.js:267:5)
+
+npm manifest: 
+  {
+      "name": "p2plinkchromeplugin",
+      "version": "1.0.0",
+      "description": "Magnet &amp; E2K Link Select and Copy from Pages",
+      "main": "index.js",
+      "scripts": {
+          "build": "rollup -c",
+          "watch": "rollup -c -w",
+          "dev": "npm-run-all --parallel start watch",
+          "test": "echo \"Error: no test specified\" && exit 1"
+      },
+      "repository": {
+          "type": "git",
+          "url": "git+https://kakaruna@github.com/kakaruna/P2PLinkChromePlugin.git"
+      },
+      "keywords": [
+          "megnet",
+          "E2K"
+      ],
+      "author": "cxz",
+      "license": "ISC",
+      "bugs": {
+          "url": "https://github.com/kakaruna/P2PLinkChromePlugin/issues"
+      },
+      "homepage": "https://github.com/kakaruna/P2PLinkChromePlugin#readme",
+      "dependencies": {
+          "@types/chrome": "0.0.69",
+          "npm-run-all": "4.1.3",
+          "preact": "8.2.9",
+          "preact-material-components": "1.4.7",
+          "rollup": "0.62.0",
+          "rollup-plugin-commonjs": "9.1.3",
+          "rollup-plugin-copy": "0.2.3",
+          "rollup-plugin-node-resolve": "3.3.0",
+          "rollup-plugin-scss": "0.4.0",
+          "rollup-plugin-typescript2": "0.15.1",
+          "tslib": "1.9.3",
+          "typescript": "2.9.2"
+      }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

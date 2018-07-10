@@ -1,4 +1,4 @@
-import { Result } from "../shared";
+import { Result } from "../shared/index";
 
 export class Content {
     private ed2k_regex: RegExp = /ed2k:\/\/\|file\|.+?\//gi;
@@ -55,4 +55,4 @@ export class Content {
     }
 }
 
-new Content();
+var content = new Content();

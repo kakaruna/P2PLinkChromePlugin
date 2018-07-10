@@ -1,4 +1,4 @@
-import { Result } from "../shared";
+import { Result } from "../shared/index";
 
 export class BackGround {
     private result: Result;

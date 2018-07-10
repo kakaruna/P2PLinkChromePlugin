@@ -1,27 +1,36 @@
 import { h, Component } from "preact";
-export interface AppProps {
-    name: string;
-}
-interface AppState {
-    name: string;
-}
+
+import Button from "preact-material-components/Button";
+import "preact-material-components/Button/style.css";
+import "preact-material-components/Theme/style.css";
+
+export interface AppProps {}
+
+export interface AppState {}
+
 export class App extends Component<AppProps, AppState> {
     constructor(props: AppProps) {
+        debugger;
+
         super(props);
-        this.state = { name: props.name };
+
+        // chrome.extension.getBackgroundPage().result;
+
+        chrome.extension.sendRequest(
+            { ask: "getResult" }, 
+            (response) => {
+                console.log(response.result);
+            }
+        );
+
+        console.log()
     }
-    componentDidMount() {
-        setTimeout(() => {
-            var state: any = this.state;
-            state.name = "Preact's componentDidMount worked as expected";
-            this.setState(state);
-        }, 2000);
-    }
+
     render(props: AppProps, state: AppState) {
         return (
-            <h1>
-                props: {props.name} state: {state.name}
-            </h1>
+            <Button ripple raised>
+                Flat button with ripple
+            </Button>
         );
     }
 }

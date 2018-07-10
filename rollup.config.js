@@ -1,7 +1,8 @@
-import typescript from "rollup-typescript";
+import typescript from "rollup-plugin-typescript2";
 import copy from "rollup-plugin-copy";
 import scss from "rollup-plugin-scss";
 import resolve from "rollup-plugin-node-resolve";
+import commonjs from "rollup-plugin-commonjs";
 
 export default [
     {
@@ -39,8 +40,10 @@ export default [
             resolve({
                 jsnext: true,
                 main: true,
-                browser: true
+                browser: true,
+                module: true
             }),
+            commonjs(),
             typescript(),
             copy({
                 "./src/popup/index.html": "dist/popup.html",

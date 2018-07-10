@@ -4,29 +4,27 @@
     (factory((global.background = {})));
 }(this, (function (exports) { 'use strict';
 
-    var BackGround = /** @class */ (function () {
-        function BackGround() {
-            var _this = this;
+    class BackGround {
+        constructor() {
             this.showPopup = function (result, id) {
                 this.result = result;
                 chrome.pageAction.show(id);
             };
-            chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
-                _this.onRequest(request, sender, sendResponse);
+            chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
+                this.onRequest(request, sender, sendResponse);
             });
-            chrome.tabs.onSelectionChanged.addListener(function (id, obj) {
-                chrome.tabs.sendRequest(id, { ask: "getResult" }, function (response) {
-                    _this.result = response.result;
+            chrome.tabs.onSelectionChanged.addListener((id, obj) => {
+                chrome.tabs.sendRequest(id, { ask: "getResult" }, (response) => {
+                    this.result = response.result;
                 });
             });
         }
-        BackGround.prototype.onRequest = function (request, sender, sendResponse) {
+        onRequest(request, sender, sendResponse) {
             if (request.ask == "p2plinks") {
                 this.showPopup(request.result, sender.tab.id);
             }
-        };
-        return BackGround;
-    }());
+        }
+    }
     new BackGround();
 
     exports.BackGround = BackGround;

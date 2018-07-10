@@ -4,26 +4,25 @@
     (factory((global.content = {})));
 }(this, (function (exports) { 'use strict';
 
-    var Content = /** @class */ (function () {
-        function Content() {
-            var _this = this;
+    class Content {
+        constructor() {
             this.ed2k_regex = /ed2k:\/\/\|file\|.+?\//gi;
             this.magnet_regex = /magnet\:\?[^\"]+/gi;
             this.ed2k_result = [];
             this.magnet_result = [];
             this.init();
-            chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
-                _this.onRequest(request, sender, sendResponse);
+            chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
+                this.onRequest(request, sender, sendResponse);
             });
         }
-        Content.prototype.init = function () {
+        init() {
             if (this.ed2k_regex.test(document.body.innerHTML) || this.magnet_regex.test(document.body.innerHTML)) {
                 this.getResult();
-                chrome.extension.sendRequest({ ask: "p2plinks", result: this.result }, function (response) {
+                chrome.extension.sendRequest({ ask: "p2plinks", result: this.result }, (response) => {
                 });
             }
-        };
-        Content.prototype.onRequest = function (request, sender, sendResponse) {
+        }
+        onRequest(request, sender, sendResponse) {
             if (request.ask == "getResult") {
                 if (this.result) {
                     sendResponse({ result: this.result });
@@ -37,15 +36,14 @@
                 this.getResult();
                 sendResponse({ result: this.result });
             }
-        };
-        Content.prototype.getResult = function () {
+        }
+        getResult() {
             this.ed2k_result = document.body.innerHTML.match(this.ed2k_regex) || [];
             this.magnet_result = document.body.innerHTML.match(this.magnet_regex) || [];
             this.result = { ed2k_result: this.ed2k_result, magnet_result: this.magnet_result };
-        };
-        return Content;
-    }());
-    new Content();
+        }
+    }
+    var content = new Content();
 
     exports.Content = Content;
 
