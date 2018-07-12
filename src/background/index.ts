@@ -4,7 +4,7 @@ export class BackGround {
     private result: Result;
 
     constructor() {
-        chrome.extension.onRequest.addListener(
+        chrome.runtime.onMessage.addListener(
             (
                 request: any, 
                 sender: chrome.runtime.MessageSender, 

@@ -10,7 +10,7 @@
                 this.result = result;
                 chrome.pageAction.show(id);
             };
-            chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
+            chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 this.onRequest(request, sender, sendResponse);
             });
             chrome.tabs.onSelectionChanged.addListener((id, obj) => {

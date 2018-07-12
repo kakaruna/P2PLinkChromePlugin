@@ -1,8 +1,13 @@
 import typescript from "rollup-plugin-typescript2";
 import copy from "rollup-plugin-copy";
-import scss from "rollup-plugin-scss";
+import del from "rollup-plugin-delete";
 import resolve from "rollup-plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
+import replace from "rollup-plugin-replace";
+import postcss from "rollup-plugin-postcss";
+import postcssPresetEnv from "postcss-preset-env";
+import clean from "postcss-clean";
+// import { terser } from "rollup-plugin-terser";
 
 export default [
     {
@@ -13,7 +18,12 @@ export default [
             format: "umd", // immediately-invoked function expression — suitable for <script> tags
             sourcemap: true
         },
-        plugins: [typescript()]
+        plugins: [
+            del({
+                targets: ["dist/background.js.map", "dist/background.js"]
+            }),
+            typescript()
+        ]
     },
     {
         entry: "./src/contentscript/index.ts",
@@ -23,7 +33,12 @@ export default [
             format: "umd", // immediately-invoked function expression — suitable for <script> tags
             sourcemap: true
         },
-        plugins: [typescript()]
+        plugins: [
+            del({
+                targets: ["dist/contentscript.js.map", "dist/contentscript.js"]
+            }),
+            typescript()
+        ]
     },
     {
         entry: "./src/popup/index.tsx",
@@ -34,16 +49,24 @@ export default [
             sourcemap: true
         },
         plugins: [
-            scss({
-                output: "dist/popup.css"
+            del({
+                targets: ["dist/popup.js.map", "dist/popup.js", "dist/popup.css"]
             }),
-            resolve({
-                jsnext: true,
-                main: true,
-                browser: true,
-                module: true
+            replace({ "process.env.NODE_ENV": JSON.stringify("development") }),
+            resolve(),
+            commonjs({
+                // All of our own sources will be ES6 modules, so only node_modules need to be resolved with cjs
+                include: "node_modules/**",
+                namedExports: {
+                    "node_modules/react/index.js": ["Component", "PropTypes", "createElement", "Children"],
+                    "node_modules/react-dom/index.js": ["render"]
+                }
             }),
-            commonjs(),
+            postcss({
+                extract: true,
+                parser: "postcss-scss",
+                plugins: [postcssPresetEnv(), clean()]
+            }),
             typescript(),
             copy({
                 "./src/popup/index.html": "dist/popup.html",

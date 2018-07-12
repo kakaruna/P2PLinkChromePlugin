@@ -11,18 +11,19 @@
             this.ed2k_result = [];
             this.magnet_result = [];
             this.init();
-            chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
+            chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 this.onRequest(request, sender, sendResponse);
             });
         }
         init() {
             if (this.ed2k_regex.test(document.body.innerHTML) || this.magnet_regex.test(document.body.innerHTML)) {
                 this.getResult();
-                chrome.extension.sendRequest({ ask: "p2plinks", result: this.result }, (response) => {
+                chrome.runtime.sendMessage({ ask: "p2plinks", result: this.result }, (response) => {
                 });
             }
         }
         onRequest(request, sender, sendResponse) {
+            console.log(request);
             if (request.ask == "getResult") {
                 if (this.result) {
                     sendResponse({ result: this.result });

@@ -10,7 +10,7 @@ export class Content {
     constructor(){
         this.init();
 
-        chrome.extension.onRequest.addListener(
+        chrome.runtime.onMessage.addListener(
                 (
                     request: any, 
                     sender: chrome.runtime.MessageSender, 
@@ -25,7 +25,7 @@ export class Content {
         if (this.ed2k_regex.test(document.body.innerHTML) || this.magnet_regex.test(document.body.innerHTML)) {
             this.getResult();
     
-            chrome.extension.sendRequest(
+            chrome.runtime.sendMessage(
                 { ask: "p2plinks", result: this.result }, 
                 (response) => {
 
@@ -35,6 +35,7 @@ export class Content {
     }
 
     onRequest(request: any, sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) {
+        console.log(request);
         if (request.ask == "getResult") {
             if (this.result) {
                 sendResponse({ result: this.result });
