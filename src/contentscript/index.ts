@@ -1,9 +1,9 @@
-import { Result } from "../shared/index";
+import { Results } from "../shared";
 
 export class Content {
     private ed2k_regex: RegExp = /ed2k:\/\/\|file\|.+?\//gi;
     private magnet_regex: RegExp = /magnet\:\?[^\"]+/gi;
-    private result: Result;
+    private result: Results;
     private ed2k_result: Array<string> = [];
     private magnet_result: Array<string> = [];
 

@@ -1,7 +1,7 @@
-import { Result } from "../shared/index";
+import { Results } from "../shared";
 
 export class BackGround {
-    private result: Result;
+    private result: Results;
 
     constructor() {
         chrome.runtime.onMessage.addListener(

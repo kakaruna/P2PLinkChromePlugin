@@ -1,12 +1,15 @@
-import logger from "redux-logger";
+// import logger from "redux-logger";
 import { createStore, applyMiddleware } from "redux";
-import { State, reducer } from "../reducers";
-import { Action } from "../actions/todos";
+import { reducers, State } from "../reducers";
+import createSagaMiddleware from "redux-saga";
+import logger from "redux-logger";
+import sagaMonitor from "../sagamonitor";
+import { Action } from "../actions/links";
 
-/*
- * We're giving State interface to create store
- * store is type of State defined in our reducers
- */
-const store = createStore<State, Action, {}, {}>(reducer, applyMiddleware(logger));
-
-export default store;
+export default () => {
+    const sagaMiddleware = createSagaMiddleware({ sagaMonitor });
+    return {
+        ...createStore<State, Action, {}, {}>(reducers, applyMiddleware(sagaMiddleware, logger)),
+        runSaga: sagaMiddleware.run
+    };
+}

@@ -1,0 +1,21 @@
+.linklist {
+    display: flex;
+    flex-direction: column;
+
+    .views {
+        display: flex;
+        flex-direction: column;
+
+        .react-swipeable-view-container {
+            > div {
+                display: flex;
+                flex-direction: column;
+
+                .typography {
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+        }
+    }
+}

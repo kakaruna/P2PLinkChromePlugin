@@ -1,1 +1,6 @@
-*{font-size:13px}body{width:400px;height:500px}
+*{font-size:13px}html{width:600px;height:400px}html body{height:100%;margin:0}html body #root{height:100%}
+.app{height:100%;display:flex;flex-direction:column}.app .content{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.linklist{display:flex;flex-direction:column}.linklist .views{display:flex;flex-direction:column}.linklist .views .react-swipeable-view-container>div{display:flex;flex-direction:column}.linklist .views .react-swipeable-view-container>div .typography{display:flex;flex-direction:column}
+.header{height:50px}
+.links{display:flex;flex-direction:column}.links .tablebody{display:block;overflow:auto}
+.footer{height:50px}

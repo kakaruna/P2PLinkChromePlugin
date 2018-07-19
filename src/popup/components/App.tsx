@@ -1,14 +1,31 @@
 import * as React from "react";
-import AddTodo from "../containers/AddTodo";
-import Todos from "../containers/Todos";
+import LinkList from "../components/linklist";
 
-class App extends React.Component {
+import Header from "./header";
+import Footer from "../containers/footer";
+import { Link } from "../models/link";
+
+import "./app.scss";
+
+interface AppProps {
+    ed2k?: Array<Link>;
+    magnet?: Array<Link>;
+    isFetching?: boolean;
+}
+interface AppState {}
+
+class App extends React.Component<AppProps, AppState> {
     render() {
+        const { ed2k, magnet, isFetching } = this.props;
+
         return (
-            <div>
-                <h1>Todos</h1>
-                <AddTodo />
-                <Todos />
+            <div className="app">
+                <Header />
+                <div className="content">
+                    {isFetching && <div>loading</div>}
+                    {!isFetching && <LinkList ed2k={ed2k} magnet={magnet} />}
+                </div>
+                <Footer />
             </div>
         );
     }

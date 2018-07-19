@@ -53,6 +53,11 @@ export default [
                 targets: ["dist/popup.js.map", "dist/popup.js", "dist/popup.css"]
             }),
             replace({ "process.env.NODE_ENV": JSON.stringify("development") }),
+            postcss({
+                extract: true,
+                parser: "postcss-scss",
+                plugins: [postcssPresetEnv(), clean()]
+            }),
             resolve(),
             commonjs({
                 // All of our own sources will be ES6 modules, so only node_modules need to be resolved with cjs
@@ -61,11 +66,6 @@ export default [
                     "node_modules/react/index.js": ["Component", "PropTypes", "createElement", "Children"],
                     "node_modules/react-dom/index.js": ["render"]
                 }
-            }),
-            postcss({
-                extract: true,
-                parser: "postcss-scss",
-                plugins: [postcssPresetEnv(), clean()]
             }),
             typescript(),
             copy({

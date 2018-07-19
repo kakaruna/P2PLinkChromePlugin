@@ -1,8 +1,17 @@
 * {
     font-size: 13px;
-  }
+}
 
-body {
-    width: 400px;
-    height: 500px;
+html {
+    width: 600px;
+    height: 400px;
+
+    body {
+        height: 100%;
+        margin: 0;
+
+        #root {
+            height: 100%;
+        }
+    }
 }
