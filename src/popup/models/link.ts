@@ -3,7 +3,8 @@ export interface Link {
     name: string;
     size: string;
     link: string;
-    selected: boolean;
+    checked: boolean;
+    showable: boolean;
 }
 
 export interface Links {

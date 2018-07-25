@@ -1,33 +1,26 @@
 import * as React from "react";
 import { Dispatch } from "redux";
-import Button from "@material-ui/core/Button";
+import Input from "@material-ui/core/Input";
+import { filterChangeAction } from "../actions/links";
 
-import { refreshResult } from "../actions/links";
 import "./footer.scss";
 
 interface FooterProps {
     dispatch?: Dispatch;
+    filter?: string;
 }
 interface FooterState {}
 
 class Footer extends React.Component<FooterProps, FooterState> {
-    refreshLinks() {
-        this.props.dispatch(refreshResult());
+    handleChange(event) {
+        const v = event.target.value;
+        this.props.dispatch(filterChangeAction(v));
     }
 
     render() {
         return (
             <div className="footer">
-                <Button
-                    variant="contained"
-                    size="small"
-                    color="primary"
-                    onClick={() => {
-                        this.refreshLinks();
-                    }}
-                >
-                    Refresh
-                </Button>
+                <Input placeholder="Filter" onChange={e => this.handleChange(e)} value={this.props.filter} />
             </div>
         );
     }

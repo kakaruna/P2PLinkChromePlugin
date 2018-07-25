@@ -2,8 +2,27 @@
     display: flex;
     flex-direction: column;
 
-    .tablebody {
-        display: block;
-        overflow: auto;
+    .row {
+        border-bottom: 1px solid #eeeeee;
+        background: #dddddd;
+    }
+
+    [role="rowgroup"] {
+        border-bottom: 1px solid #e0e0e0;
+        outline: none;
+
+        .row {
+            cursor: pointer;
+            &:nth-child(even) {
+                background-color: #f0f0f0;
+            }
+            &:nth-child(odd) {
+                background-color: #ffffff;
+            }
+
+            &:hover{
+                background-color: #e5e5e5;
+            }
+        }
     }
 }

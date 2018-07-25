@@ -1,8 +1,9 @@
-import { put, call, fork, select, take, takeLatest, delay, all } from "redux-saga/effects";
-import { requestResult, receivetResult, refreshResult } from "../actions/links";
+import { put, call, fork, select, take, takeLatest, all, delay, cancel } from "redux-saga/effects";
+import { requestResult, receivetResult, filterResultAction, ActionTypes as actions } from "../actions/links";
 import { Results } from "../../shared";
 import { getLinksState } from "../selectors/links";
 import { Links, Link } from "../models/link";
+import { selectTab } from "../actions/tabs";
 
 export function getResultsApi() {
     return new Promise((resolve, reject) => {
@@ -13,6 +14,13 @@ export function getResultsApi() {
             });
         });
     });
+
+    // return new Promise((resolve, reject) => {
+    //     resolve({
+    //         ed2k_result: [],
+    //         magnet_result: ["aaa"]
+    //     });
+    // });
 }
 
 export function refreshResultsApi() {
@@ -37,11 +45,12 @@ export function toed2kLink(r: Array<string>): Array<Link> {
         }
 
         links.push({
-            id: i,
+            id: i + 1,
             name: decodeURI(tmp[1]),
             size: (parseFloat(tmp[2]) / (1024 * 1024)).toFixed(2),
             link: l,
-            selected: false
+            checked: false,
+            showable: true
         });
     });
 
@@ -53,17 +62,25 @@ export function tomagnetLink(r: Array<string>): Array<Link> {
     const size_regex = /xl=(.+?)&/;
 
     let links = new Array<Link>();
+    var index = 1;
     r.map((l, i) => {
         let name = name_regex.exec(l);
         let size = size_regex.exec(l);
 
+        if (links.findIndex(i => i.link === l) > -1) {
+            return false;
+        }
+
         links.push({
-            id: i,
+            id: index,
             name: name ? decodeURI(name[1]) : l,
             size: size ? size[1] : "0",
             link: l,
-            selected: false
+            checked: false,
+            showable: true
         });
+
+        index++;
     });
 
     return links;
@@ -74,6 +91,8 @@ export function* getResults() {
     const r: Results = yield call(getResultsApi);
     const l: Links = { ed2k: toed2kLink(r.ed2k_result), magnet: tomagnetLink(r.magnet_result) };
     yield put(receivetResult(l));
+    var index = l.magnet.length > 0 && l.ed2k.length === 0 ? 1 : 0;
+    yield put(selectTab(index));
 }
 
 export function* refreshResults() {
@@ -83,13 +102,50 @@ export function* refreshResults() {
     yield put(receivetResult(l));
 }
 
+var filterTask: any;
+export function* delayFilter() {
+    if (filterTask) cancel(filterTask);
+    yield delay(500)
+    filterTask = yield fork(filterResult);
+}
+
+export function* filterResult() {
+    const state = yield select(getLinksState);
+
+    let { ed2k, magnet, filter } = state;
+    ed2k = Object.assign([], ed2k);
+    magnet = Object.assign([], magnet);
+
+    ed2k.map(l => {
+        l.showable = true;
+
+        if (l.name.indexOf(filter) < 0) {
+            l.showable = false;
+        }
+    });
+
+    magnet.map(l => {
+        l.showable = true;
+
+        if (l.name.indexOf(filter) < 0) {
+            l.showable = false;
+        }
+    });
+
+    yield put(filterResultAction({ ed2k: ed2k, magnet: magnet }));
+}
+
 export function* startup() {
     const getLinks = yield select(getLinksState);
     yield fork(getResults, getLinks);
 }
 
-function* watchIncrementAsync() {
-    yield takeLatest('INCREMENT_ASYNC', refreshResults);
+export function* watchRefreshResult() {
+    yield takeLatest(actions.REFRESH_RESULTS, refreshResults);
+}
+
+export function* watchFilterChange() {
+    yield takeLatest(actions.FILTER_CHANGE, delayFilter);
 }
 
 export default function* root() {
@@ -98,5 +154,8 @@ export default function* root() {
     // yield takeEvery(refreshResult, refreshResults);
     // yield takeLatest(refreshResult, refreshResults);
 
-    yield all([startup(), watchIncrementAsync()]);
+    // yield all([startup(), watchRefreshResult(), watchFilterChangeAsync()]);
+    yield fork(startup);
+    yield fork(watchRefreshResult);
+    yield fork(watchFilterChange);
 }

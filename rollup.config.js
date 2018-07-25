@@ -63,8 +63,8 @@ export default [
                 // All of our own sources will be ES6 modules, so only node_modules need to be resolved with cjs
                 include: "node_modules/**",
                 namedExports: {
-                    "node_modules/react/index.js": ["Component", "PropTypes", "createElement", "Children"],
-                    "node_modules/react-dom/index.js": ["render"]
+                    "node_modules/react/index.js": ["Component", "PropTypes", "createElement", "Children", "PureComponent"],
+                    "node_modules/react-dom/index.js": ["render", "findDOMNode"]
                 }
             }),
             typescript(),
